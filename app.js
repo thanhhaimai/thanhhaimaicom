@@ -8,7 +8,10 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , stylus = require('stylus')
+  , nib = require('nib')
+  ;
 
 var app = express();
 
@@ -23,7 +26,10 @@ app.configure(function(){
   app.use(express.cookieParser(config.SECRET));
   app.use(express.session());
   app.use(app.router);
-  app.use(require('stylus').middleware(__dirname + '/public'));
+  app.use(stylus.middleware({
+    src: __dirname + '/public',
+    compile: compile
+  }));
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
@@ -33,6 +39,13 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+
+function compile(str, path) {
+  return stylus(str)
+    .set('compress', true)
+    .use(nib())
+    .import('nib');
+}
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
