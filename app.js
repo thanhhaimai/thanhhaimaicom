@@ -5,8 +5,6 @@
 
 var express = require('express')
   , config = require('./private/config.js')
-  , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
   , stylus = require('stylus')
@@ -37,12 +35,11 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/', require('./routes').index);
 
 function compile(str, path) {
   return stylus(str)
-    .set('compress', true)
+    .set('compress', false)
     .use(nib())
     .import('nib');
 }
