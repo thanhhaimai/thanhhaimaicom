@@ -4,5 +4,9 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'thanh hai mai' });
+  res.render('index');
 };
+
+exports.projects = function(req, res) {
+  res.render('projects');
+}

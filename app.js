@@ -36,6 +36,7 @@ app.configure('development', function(){
 });
 
 app.get('/', require('./routes').index);
+app.get('/projects', require('./routes').projects);
 
 function compile(str, path) {
   return stylus(str)
